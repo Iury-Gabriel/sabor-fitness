@@ -25,17 +25,17 @@ export default function MyOrdersPage() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "pending":
+      case "pendente":
         return { label: "Pendente", color: "bg-yellow-100 text-yellow-800" }
-      case "confirmed":
+      case "confirmado":
         return { label: "Confirmado", color: "bg-blue-100 text-blue-800" }
-      case "preparing":
+      case "preparando":
         return { label: "Em Preparo", color: "bg-orange-100 text-orange-800" }
-      case "ready":
+      case "pronto":
         return { label: "Pronto", color: "bg-purple-100 text-purple-800" }
-      case "delivered":
+      case "entregue":
         return { label: "Entregue", color: "bg-green-100 text-green-800" }
-      case "completed":
+      case "completo":
         return { label: "Concluído", color: "bg-green-100 text-green-800" }
       default:
         return { label: "Desconhecido", color: "bg-gray-100 text-gray-800" }
@@ -176,107 +176,112 @@ export default function MyOrdersPage() {
           </DialogHeader>
 
           {selectedOrder && (
-            <div className="space-y-4 overflow-y-auto flex-1">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className="font-bold">Pedido #{selectedOrder.id.substring(0, 8)}</h3>
-                  <p className="text-sm text-neutral-500">{formatDate(selectedOrder.createdAt)}</p>
+            <>
+              <div className="space-y-4 overflow-y-auto flex-1">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="font-bold">Pedido #{selectedOrder.id.substring(0, 8)}</h3>
+                    <p className="text-sm text-neutral-500">{formatDate(selectedOrder.createdAt)}</p>
+                  </div>
+                  <span className={`px-2 py-1 rounded-full text-sm ${getStatusLabel(selectedOrder.status).color}`}>
+                    {getStatusLabel(selectedOrder.status).label}
+                  </span>
                 </div>
-                <span className={`px-2 py-1 rounded-full text-sm ${getStatusLabel(selectedOrder.status).color}`}>
-                  {getStatusLabel(selectedOrder.status).label}
-                </span>
-              </div>
 
-              {selectedOrder.orderType === "delivery" ? (
-                <div className="border rounded-lg p-4 space-y-2">
-                  <div className="flex items-center">
-                    <MapPin className="h-5 w-5 text-green-600 mr-2" />
-                    <h3 className="font-medium">Endereço de Entrega</h3>
-                  </div>
-                  <div className="text-sm text-neutral-700">
-                    <p className="font-medium">{selectedOrder.deliveryInfo.name}</p>
-                    <p>{selectedOrder.deliveryInfo.phone}</p>
-                    <p>{selectedOrder.deliveryInfo.address}</p>
-                    {selectedOrder.deliveryInfo.complement && <p>{selectedOrder.deliveryInfo.complement}</p>}
-                    {selectedOrder.deliveryInfo.instructions && (
-                      <p className="mt-1 italic text-neutral-500">{selectedOrder.deliveryInfo.instructions}</p>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <div className="border rounded-lg p-4 space-y-2">
-                  <div className="flex items-center">
-                    <Store className="h-5 w-5 text-green-600 mr-2" />
-                    <h3 className="font-medium">Retirada no Local</h3>
-                  </div>
-                  <div className="text-sm text-neutral-700">
-                    <p className="font-medium">{selectedOrder.deliveryInfo.name}</p>
-                    <p>{selectedOrder.deliveryInfo.phone}</p>
-                    <p>Sabor Fitness - Av. Exemplo, 1234, Centro</p>
-                    {selectedOrder.deliveryInfo.instructions && (
-                      <p className="mt-1 italic text-neutral-500">{selectedOrder.deliveryInfo.instructions}</p>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              <div className="border rounded-lg p-4 space-y-2">
-                <h3 className="font-medium">Itens do Pedido</h3>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
-                  {selectedOrder.items.map((item) => (
-                    <div key={item.id} className="flex items-center py-2 border-b">
-                      <div className="relative h-10 w-10 rounded-md overflow-hidden">
-                        <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
-                      </div>
-                      <div className="ml-3 flex-1">
-                        <div className="flex justify-between">
-                          <span className="font-medium text-sm">{item.name}</span>
-                          <span className="text-sm">R$ {(item.price * item.quantity).toFixed(2)}</span>
-                        </div>
-                        <div className="text-xs text-neutral-500">Qtd: {item.quantity}</div>
-                      </div>
+                {selectedOrder.orderType === "delivery" ? (
+                  <div className="border rounded-lg p-4 space-y-2">
+                    <div className="flex items-center">
+                      <MapPin className="h-5 w-5 text-green-600 mr-2" />
+                      <h3 className="font-medium">Endereço de Entrega</h3>
                     </div>
-                  ))}
+                    <div className="text-sm text-neutral-700">
+                      <p className="font-medium">{selectedOrder.deliveryInfo.name}</p>
+                      <p>{selectedOrder.deliveryInfo.phone}</p>
+                      <p>{selectedOrder.deliveryInfo.address}</p>
+                      {selectedOrder.deliveryInfo.complement && <p>{selectedOrder.deliveryInfo.complement}</p>}
+                      {selectedOrder.deliveryInfo.instructions && (
+                        <p className="mt-1 italic text-neutral-500">{selectedOrder.deliveryInfo.instructions}</p>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="border rounded-lg p-4 space-y-2">
+                    <div className="flex items-center">
+                      <Store className="h-5 w-5 text-green-600 mr-2" />
+                      <h3 className="font-medium">Retirada no Local</h3>
+                    </div>
+                    <div className="text-sm text-neutral-700">
+                      <p className="font-medium">{selectedOrder.deliveryInfo.name}</p>
+                      <p>{selectedOrder.deliveryInfo.phone}</p>
+                      <p>Sabor Fitness - Av. Exemplo, 1234, Centro</p>
+                      {selectedOrder.deliveryInfo.instructions && (
+                        <p className="mt-1 italic text-neutral-500">{selectedOrder.deliveryInfo.instructions}</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <div className="border rounded-lg p-4 space-y-2">
+                  <h3 className="font-medium">Itens do Pedido</h3>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {selectedOrder.items.map((item) => (
+                      <div key={item.id} className="flex items-center py-2 border-b">
+                        <div className="relative h-10 w-10 rounded-md overflow-hidden">
+                          <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
+                        </div>
+                        <div className="ml-3 flex-1">
+                          <div className="flex justify-between">
+                            <span className="font-medium text-sm">{item.name}</span>
+                            <span className="text-sm">R$ {(item.price * item.quantity).toFixed(2)}</span>
+                          </div>
+                          <div className="text-xs text-neutral-500">Qtd: {item.quantity}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="pt-2 space-y-1">
+                    <div className="flex justify-between text-sm">
+                      <span>Subtotal</span>
+                      <span>R$ {selectedOrder.total.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Taxa de entrega</span>
+                      <span className="text-green-600">Grátis</span>
+                    </div>
+                    <div className="flex justify-between font-bold pt-1 border-t mt-2">
+                      <span>Total</span>
+                      <span>R$ {selectedOrder.total.toFixed(2)}</span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="pt-2 space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>Subtotal</span>
-                    <span>R$ {selectedOrder.total.toFixed(2)}</span>
+                <div className="border rounded-lg p-4 space-y-2">
+                  <div className="flex items-center">
+                    <CreditCard className="h-5 w-5 text-green-600 mr-2" />
+                    <h3 className="font-medium">Forma de Pagamento</h3>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Taxa de entrega</span>
-                    <span className="text-green-600">Grátis</span>
-                  </div>
-                  <div className="flex justify-between font-bold pt-1 border-t mt-2">
-                    <span>Total</span>
-                    <span>R$ {selectedOrder.total.toFixed(2)}</span>
-                  </div>
+                  <p className="text-sm text-neutral-700">
+                    {selectedOrder.paymentMethod === "credit" &&
+                      `Cartão de Crédito/Débito (${selectedOrder.orderType === "delivery" ? "na entrega" : "na retirada"})`}
+                    {selectedOrder.paymentMethod === "pix" &&
+                      `Pix ${selectedOrder.pixPaid ? "(Pago)" : "(Aguardando pagamento)"}`}
+                    {selectedOrder.paymentMethod === "cash" &&
+                      `Dinheiro (${selectedOrder.orderType === "delivery" ? "na entrega" : "na retirada"})`}
+                  </p>
                 </div>
               </div>
 
-              <div className="border rounded-lg p-4 space-y-2">
-                <div className="flex items-center">
-                  <CreditCard className="h-5 w-5 text-green-600 mr-2" />
-                  <h3 className="font-medium">Forma de Pagamento</h3>
-                </div>
-                <p className="text-sm text-neutral-700">
-                  {selectedOrder.paymentMethod === "credit" &&
-                    `Cartão de Crédito/Débito (${selectedOrder.orderType === "delivery" ? "na entrega" : "na retirada"})`}
-                  {selectedOrder.paymentMethod === "pix" &&
-                    `Pix ${selectedOrder.pixPaid ? "(Pago)" : "(Aguardando pagamento)"}`}
-                  {selectedOrder.paymentMethod === "cash" &&
-                    `Dinheiro (${selectedOrder.orderType === "delivery" ? "na entrega" : "na retirada"})`}
-                </p>
+              <div className="pt-4 mt-auto border-t">
+                <Button
+                  onClick={() => handleWhatsAppSend(selectedOrder)}
+                  className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700"
+                >
+                  Consultar Pedido via WhatsApp <ExternalLink className="h-4 w-4" />
+                </Button>
               </div>
-            </div>
+            </>
           )}
-          <Button
-            onClick={() => handleWhatsAppSend(selectedOrder)}
-            className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 sticky bottom-0 mt-4"
-          >
-            Consultar Pedido via WhatsApp <ExternalLink className="h-4 w-4" />
-          </Button>
         </DialogContent>
       </Dialog>
     </main>
