@@ -260,7 +260,7 @@ export function CheckoutModal({
 
   const handleWhatsAppSend = () => {
     const message = formatWhatsAppMessage();
-    window.open(`https://wa.me/5500000000000?text=${message}`, "_blank");
+    window.open(`https://wa.me/5599981036660?text=${message}`, "_blank");
   };
 
   const copyPixCode = () => {
